@@ -1,7 +1,7 @@
 <template>
   <div>
     <video id="my-video" width="400px" autoplay muted playsinline></video>
-    <p id="my-id"></p>
+    <p>{{ peerId }}</p>
     <input id="their-id" />
     <button @click="makeCall()">発信</button>
     <video id="their-video" width="400px" autoplay muted playsinline></video>
@@ -9,20 +9,20 @@
 </template>
 
 <script>
-const peer = new Peer({
-  key: 'b160e98d-c322-4a0a-83df-b5c4e86c8891',
-  debug: 3,
-})
+import Peer from 'skyway-js'
 export default {
   data() {
     return {
       localStream: '',
+      APIKey: 'b160e98d-c322-4a0a-83df-b5c4e86c8891',
+      peer: '',
+      peerId: '',
     }
   },
   methods: {
     makeCall() {
       const theirID = document.getElementById('their-id').value
-      const mediaConnection = peer.call(theirID, this.localStream)
+      const mediaConnection = this.peer.call(theirID, this.localStream)
       this.setEventListener(mediaConnection)
     },
     setEventListener(mediaConnection) {
@@ -35,6 +35,10 @@ export default {
     },
   },
   mounted() {
+    this.peer = new Peer({
+      key: this.APIKey,
+      debug: 3,
+    })
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
@@ -49,10 +53,10 @@ export default {
         // 失敗時にはエラーログを出力
         console.error('mediaDevice.getUserMedia() error:', error)
       })
-    peer.on('open', () => {
-      document.getElementById('my-id').textContent = peer.id
+    this.peer.on('open', () => {
+      this.peerId = this.peer.id
     })
-    peer.on('call', (mediaConnection) => {
+    this.peer.on('call', (mediaConnection) => {
       console.log('着信あり')
       mediaConnection.answer(this.localStream)
       this.setEventListener(mediaConnection)
