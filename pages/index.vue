@@ -17,13 +17,12 @@ export default {
   data() {
     return {
       localStream: '',
-      APIKey: 'b160e98d-c322-4a0a-83df-b5c4e86c8891',
     }
   },
   methods: {
     makeCall() {
       const theirID = document.getElementById('their-id').value
-      const mediaConnection = this.peer.call(theirID, this.localStream)
+      const mediaConnection = peer.call(theirID, this.localStream)
       this.setEventListener(mediaConnection)
     },
     setEventListener(mediaConnection) {
@@ -36,10 +35,6 @@ export default {
     },
   },
   mounted() {
-    this.peer = new Peer({
-      key: 'b160e98d-c322-4a0a-83df-b5c4e86c8891',
-      debug: 3,
-    })
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
