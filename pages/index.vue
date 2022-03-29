@@ -2,7 +2,7 @@
   <div>
     <video id="my-video" width="400px" autoplay muted playsinline></video>
     <p>{{ peerId }}</p>
-    <input id="their-id" v-model="theirId" />
+    <input  v-bind="theirId" />
     <button @click="makeCall()">発信</button>
     <video id="their-video" width="400px" autoplay muted playsinline></video>
   </div>
@@ -17,7 +17,7 @@ export default {
       APIKey: 'b160e98d-c322-4a0a-83df-b5c4e86c8891',
       peer: '',
       peerId: '',
-      theirID:''
+      theirId:''
     }
   },
   methods: {
